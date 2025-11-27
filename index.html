@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HealthData Portal - New Era University</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #dbe9fc;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: auto;
+        background: #e6f0ff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .header {
+        background: #2e7ce4;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px 10px 0 0;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .subheader {
+        text-align: center;
+        font-size: 13px;
+        color: #333;
+        margin: 10px 0 20px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        height: 80px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: #2e7ce4;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .record {
+        background: #eaf1ff;
+        padding: 15px;
+        margin-top: 15px;
+        border-left: 5px solid #2e7ce4;
+        border-radius: 5px;
+    }
+
+    .tips-box {
+        margin-top: 10px;
+        padding: 10px;
+        background: #d3e4ff;
+        border-left: 4px solid #2e7ce4;
+        border-radius: 5px;
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 12px;
+        color: white;
+        background: #2e7ce4;
+        padding: 8px;
+        border-radius: 0 0 10px 10px;
+    }
+
+    select {
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">📇 HealthData Portal - New Era University</div>
+    <div class="subheader">This portal is designed for New Era University students and staff to manage their health records securely within the school environment. Submit your health information, receive general healing tips, and locate nearby medical facilities for quick access to care.</div>
+
+    <label>👤 Name:</label>
+    <input id="name">
+
+    <label>🎂 Age:</label>
+    <input id="age" type="number">
+
+    <label>⚧ Gender:</label>
+    <select id="gender">
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+    </select>
+
+    <label>🩺 Condition:</label>
+    <input id="condition" type="text" placeholder="Type your condition here...">
+
+    <label>📅 Date:</label>
+    <input type="date" id="date">
+
+    <label>📝 Notes/Remarks:</label>
+    <textarea id="notes" placeholder="Enter any additional notes or remarks..."></textarea>
+
+    <button onclick="saveRecord()">Submit Record</button>
+
+    <!-- NEW FEATURES START -->
+    <button onclick="showNearbyHospitals()">📍 Find Nearest Hospitals</button>
+    <button onclick="window.location.href='tel:911'">🚨 Call Emergency</button>
+    <div id="hospital-list"></div>
+    <div id="resources"></div>
+    <!-- NEW FEATURES END -->
+
+    <div id="records"></div>
+
+    <div class="footer">Confidential Medical Record - For Authorized Personnel Only</div>
+</div>
+
+<script>
+    function getHealingTips(condition) {
+        const tips = {
+            "flu": "💊 Rest well, drink warm fluids, and take vitamin C.",
+            "headache": "🧘‍♂️ Relax, hydrate, and avoid screen time.",
+            "fever": "🌡️ Drink water, rest, and take paracetamol if needed.",
+            "asthma": "💨 Avoid allergens and always keep an inhaler nearby.",
+            "diabetes": "🥗 Eat low-sugar foods and monitor your glucose.",
+            "hypertension": "🫀 Reduce salty foods and manage stress.",
+            "cancer": "🫶 Follow your doctor’s treatment plan and maintain good nutrition.",
+            "injury": "🩹 Rest the injured area and apply ice if swollen.",
+            "cough": "🫁 Drink warm water, avoid cold drinks, and rest your voice.",
+            "sore throat": "🗣️ Gargle warm salt water and drink warm tea with honey.",
+            "allergy": "🌸 Avoid triggers, keep your space clean, and take antihistamines.",
+            "stomachache": "🤢 Avoid oily foods, drink warm water, and rest your stomach.",
+            "diarrhea": "🚰 Stay hydrated with water or ORS; avoid dairy for now.",
+            "covid-19": "😷 Isolate, rest well, drink plenty of fluids, and monitor your symptoms.",
+            "migraine": "💡 Stay in a dark quiet room and stay hydrated.",
+            "back pain": "🧍‍♂️ Stretch lightly, maintain good posture, and avoid heavy lifting.",
+            "skin rash": "🧴 Avoid scratching; apply cool compress and mild lotion.",
+            "fracture": "🦴 Keep the area immobilized and seek medical attention immediately.",
+            "burn": "🔥 Run cool water over the area for 10–20 minutes; avoid ice.",
+            "anxiety": "🫂 Practice breathing exercises, rest, and avoid stressful situations.",
+            "depression": "💛 Talk to someone you trust and seek professional help if needed."
+        };
+
+        const key = condition.trim().toLowerCase();
+        return tips[key] || "🩺 Monitor symptoms and seek medical guidance if it gets worse.";
+    }
+
+    function saveRecord() {
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const gender = document.getElementById("gender").value;
+        const condition = document.getElementById("condition").value;
+        const date = document.getElementById("date").value;
+        const notes = document.getElementById("notes").value;
+
+        const healingTips = getHealingTips(condition);
+
+        const recordDiv = document.createElement("div");
+        recordDiv.className = "record";
+        recordDiv.innerHTML = `
+            <strong>Name:</strong> ${name} <br>
+            <strong>Age:</strong> ${age} <br>
+            <strong>Gender:</strong> ${gender} <br>
+            <strong>Condition:</strong> ${condition} <br>
+            <strong>Date:</strong> ${date} <br>
+            <strong>Notes:</strong> ${notes} <br><br>
+            <div class="tips-box">
+                <strong>💡 Healing Tips:</strong><br>
+                ${healingTips}
+            </div>
+        `;
+        document.getElementById("records").appendChild(recordDiv);
+    }
+
+    // --- Clickable Nearby Hospitals ---
+    function showNearbyHospitals() {
+        const hospitals = [
+            {name: "New Era University Clinic", link: "https://goo.gl/maps/ABC123"},
+            {name: "Fairview Medical Center", link: "https://goo.gl/maps/DEF456"},
+            {name: "St. Luke's Hospital Quezon City", link: "https://goo.gl/maps/GHI789"},
+            {name: "Quezon City General Hospital", link: "https://goo.gl/maps/JKL012"},
+            {name: "Community Health Center", link: "https://goo.gl/maps/MNO345"}
+        ];
+
+        const listDiv = document.getElementById("hospital-list");
+        listDiv.innerHTML = "<strong>Nearby Hospitals:</strong><br>" +
+            hospitals.map(h => `<a href="${h.link}" target="_blank">${h.name}</a>`).join("<br>");
+    }
+
+    // --- Educational Resources ---
+    function showResources(condition) {
+        const resources = {
+            "flu": "https://www.cdc.gov/flu/prevent/index.html",
+            "diabetes": "https://www.diabetes.org/healthy-living",
+            "covid-19": "https://www.who.int/emergencies/diseases/novel-coronavirus-2019"
+        };
+        const key = condition.trim().toLowerCase();
+        const resDiv = document.getElementById("resources");
+        if(resources[key]){
+            resDiv.innerHTML = `<strong>💡 Useful Resource:</strong> <a href="${resources[key]}" target="_blank">${resources[key]}</a>`;
+        } else {
+            resDiv.innerHTML = "";
+        }
+    }
+
+    // Trigger resources after submitting a record
+    document.querySelector("button").addEventListener("click", () => {
+        const condition = document.getElementById("condition").value;
+        showResources(condition);
+    });
+</script>
+
+</body>
+</html>
