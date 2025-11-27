@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>HealthData Portal - New Era University</title>
+<!-- MOBILE-FRIENDLY META TAG -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -13,6 +15,7 @@
 
     .container {
         max-width: 600px;
+        width: 90%; /* Flexible width for mobile */
         margin: auto;
         background: #e6f0ff;
         padding: 20px;
@@ -99,6 +102,32 @@
 
     select {
         cursor: pointer;
+    }
+
+    img {
+        max-width: 100%; /* Ensures images scale on mobile */
+        height: auto;
+    }
+
+    /* MEDIA QUERY FOR SMALL SCREENS */
+    @media (max-width: 600px) {
+        .header {
+            font-size: 16px;
+            padding: 12px 15px;
+        }
+        .subheader {
+            font-size: 12px;
+        }
+        label {
+            font-size: 13px;
+        }
+        button {
+            font-size: 14px;
+            padding: 10px;
+        }
+        .tips-box {
+            font-size: 13px;
+        }
     }
 </style>
 </head>
@@ -241,3 +270,5 @@
 
 </body>
 </html>
+
+
